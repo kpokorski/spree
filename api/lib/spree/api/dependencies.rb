@@ -32,7 +32,8 @@ module Spree
         :platform_line_item_create_service, :platform_line_item_update_service, :platform_line_item_destroy_service,
         :platform_order_approve_service, :platform_order_cancel_service,
         :platform_shipment_change_state_service, :platform_shipment_create_service, :platform_shipment_update_service,
-        :platform_shipment_add_item_service, :platform_shipment_remove_item_service
+        :platform_shipment_add_item_service, :platform_shipment_remove_item_service,
+        :platform_products_generate_automated_translations
       ].freeze
 
       attr_accessor *INJECTION_POINTS
@@ -159,6 +160,9 @@ module Spree
         @platform_shipment_change_state_service = Spree::Dependencies.shipment_change_state_service
         @platform_shipment_add_item_service = Spree::Dependencies.shipment_add_item_service
         @platform_shipment_remove_item_service = Spree::Dependencies.shipment_remove_item_service
+
+        # translation services
+        @platform_products_generate_automated_translations = Spree::Dependencies.products_generate_automated_translations
       end
     end
   end

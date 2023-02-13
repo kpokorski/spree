@@ -22,7 +22,8 @@ module Spree
         :shipment_create_service, :shipment_add_item_service, :shipment_remove_item_service,
         :payment_create_service, :address_create_service, :address_update_service,
         :checkout_select_shipping_method_service, :data_feeds_google_rss_service, :data_feeds_google_optional_attributes_service,
-        :data_feeds_google_required_attributes_service, :data_feeds_google_optional_sub_attributes_service, :data_feeds_google_products_list
+        :data_feeds_google_required_attributes_service, :data_feeds_google_optional_sub_attributes_service, :data_feeds_google_products_list,
+        :products_generate_automated_translations, :products_automated_translations_provider
       ].freeze
 
       attr_accessor *INJECTION_POINTS
@@ -118,6 +119,10 @@ module Spree
         @data_feeds_google_required_attributes_service = 'Spree::DataFeeds::Google::RequiredAttributes'
         @data_feeds_google_optional_sub_attributes_service = 'Spree::DataFeeds::Google::OptionalSubAttributes'
         @data_feeds_google_products_list = 'Spree::DataFeeds::Google::ProductsList'
+
+        # translations
+        @products_generate_automated_translations = 'Spree::Products::Translations::GenerateAutomatedTranslations'
+        @products_automated_translations_provider = nil
       end
 
       def set_default_finders
