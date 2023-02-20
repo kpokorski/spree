@@ -4,11 +4,14 @@ module Spree
   describe Products::Translations::GenerateAutomatedTranslations do
     describe '#call' do
       subject do
-        described_class.call(product: product,
-                             source_locale: source_locale,
-                             target_locales: target_locales,
-                             automated_translations_provider: provider,
-                             skip_existing: skip_existing)
+        generate_automated_translations.call(product: product,
+                                             source_locale: source_locale,
+                                             target_locales: target_locales,
+                                             skip_existing: skip_existing)
+      end
+
+      let(:generate_automated_translations) do
+        described_class.new(tp: provider)
       end
 
       let(:provider) { double }
