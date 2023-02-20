@@ -12,8 +12,8 @@ module Spree
       end
 
       let(:provider) { double }
-      let(:source_locale) { :en }
-      let(:target_locales) { [:de, :fr] }
+      let(:source_locale) { 'en' }
+      let(:target_locales) { %w[de fr] }
       let(:skip_existing) { false }
 
       let(:de_attributes) { { name: 'DE Name', description: 'DE Description' } }
@@ -23,7 +23,7 @@ module Spree
         let(:product) { create(:product, translations: [product_translation_fr]) }
         let(:product_translation_fr) do
           build(:product_translation,
-                locale: :fr,
+                locale: 'fr',
                 name: 'FR Name Original',
                 description: 'FR Description Original')
         end
@@ -32,13 +32,13 @@ module Spree
           let(:skip_existing) { true }
 
           it 'fetches only the missing locales from the provider' do
-            expect(provider).to receive(:call).with(hash_including(source_locale: :en, target_locale: :de)).and_return(de_attributes)
-            expect(provider).to_not receive(:call).with(hash_including(source_locale: :en, target_locale: :fr))
+            expect(provider).to receive(:call).with(hash_including(source_locale: 'en', target_locale: 'de')).and_return(Spree::ServiceModule::Result.new(true, de_attributes, nil))
+            expect(provider).to_not receive(:call).with(hash_including(source_locale: 'en', target_locale: 'fr'))
 
             subject
 
-            de_translation = product.translations.find_by(locale: :de)
-            fr_translation = product.translations.find_by(locale: :fr)
+            de_translation = product.translations.find_by(locale: 'de')
+            fr_translation = product.translations.find_by(locale: 'fr')
             expect(de_translation.name).to eq('DE Name')
             expect(de_translation.description).to eq('DE Description')
             expect(fr_translation.name).to eq('FR Name Original')
@@ -50,13 +50,13 @@ module Spree
           let(:skip_existing) { false }
 
           it 'fetches all target locales from the provider' do
-            expect(provider).to receive(:call).with(hash_including(source_locale: :en, target_locale: :de)).and_return(de_attributes)
-            expect(provider).to receive(:call).with(hash_including(source_locale: :en, target_locale: :fr)).and_return(fr_attributes)
+            expect(provider).to receive(:call).with(hash_including(source_locale: 'en', target_locale: 'de')).and_return(Spree::ServiceModule::Result.new(true, de_attributes, nil))
+            expect(provider).to receive(:call).with(hash_including(source_locale: 'en', target_locale: 'fr')).and_return(Spree::ServiceModule::Result.new(true, fr_attributes, nil))
 
             subject
 
-            de_translation = product.translations.find_by(locale: :de)
-            fr_translation = product.translations.find_by(locale: :fr)
+            de_translation = product.translations.find_by(locale: 'de')
+            fr_translation = product.translations.find_by(locale: 'fr')
             expect(de_translation.name).to eq('DE Name')
             expect(de_translation.description).to eq('DE Description')
             expect(fr_translation.name).to eq('FR Name')

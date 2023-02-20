@@ -28,19 +28,24 @@ module Spree
         end
 
         def translate_to_locale(automated_translations_provider, product, source_attributes, source_locale, target_locale)
-          translated_attributes = automated_translations_provider.call(product: product,
-                                                                       source_attributes: source_attributes,
-                                                                       source_locale: source_locale,
-                                                                       target_locale: target_locale)
+          translated_attributes_result = automated_translations_provider.call(product: product,
+                                                                              source_attributes: source_attributes,
+                                                                              source_locale: source_locale,
+                                                                              target_locale: target_locale)
 
-          translation = product.translations.find_or_initialize_by(locale: target_locale)
-          translation.update!(translated_attributes)
+          if translated_attributes_result.success?
+            translated_attributes = translated_attributes_result.value
+            translation = product.translations.find_or_initialize_by(locale: target_locale)
+            translation.update!(translated_attributes)
+          else
+            raise translated_attributes_result.value
+          end
         end
 
         def translations_to_generate(product, target_locales, skip_existing)
           return target_locales unless skip_existing
 
-          target_locales - product.translations.pluck(:locale).map(&:to_sym)
+          target_locales - product.translations.pluck(:locale).map(&:to_s)
         end
 
         class << self
