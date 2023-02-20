@@ -359,7 +359,7 @@ describe 'API V2 Platform Products Spec' do
 
     context 'when automated translations are not configured' do
       before do
-        allow(Spree::Core::Dependencies).to receive(:products_automated_translations_provider).and_return(nil)
+        allow(Spree::Dependencies).to receive(:products_automated_translations_provider).and_return(nil)
         subject
       end
 
@@ -372,7 +372,7 @@ describe 'API V2 Platform Products Spec' do
 
     context 'when automated translations are configured' do
       before do
-        allow(Spree::Core::Dependencies).to receive_message_chain(:products_automated_translations_provider, :constantize).and_return(translations_provider)
+        allow(Spree::Dependencies).to receive_message_chain(:products_automated_translations_provider, :constantize).and_return(translations_provider)
       end
 
       let(:translations_provider) { double }

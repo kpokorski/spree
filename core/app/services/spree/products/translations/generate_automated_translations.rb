@@ -49,7 +49,7 @@ module Spree
           end
 
           def injected_automated_translations_provider
-            Spree::Core::Dependencies.products_automated_translations_provider&.constantize
+            Spree::Dependencies.products_automated_translations_provider&.constantize
           end
         end
       end
